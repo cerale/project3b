@@ -1,0 +1,26 @@
+NAME: Alejandra Cervantes,Ryan Miyahara
+EMAIL: alecer@ucla.edu,rmiyahara144@gmail.com
+ID: 104844623,804585999
+
+------------------
+| Included Files |
+------------------
+Within this submission are the following files:
+lab3b.c
+This program has the following exit codes.
+0 ... successful execution, no inconsistencies found.
+1 ... unsuccessful execution, bad parameters or system call failure.
+2 ... successful execution, inconsistencies found.
+
+Makefile
+Builds all the executables and has the following targets:
+default
+Compiles lab3b.c with the appropriate flags.
+clean
+Deletes all files lab3b creates.
+dist
+Creates the submission tarball.
+
+--------------
+| References |
+--------------
