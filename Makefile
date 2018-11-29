@@ -7,10 +7,10 @@ ifndef VERBOSE
 endif
 
 default:
-	gcc -Wall -Wextra -g lab3b.c -o lab3b
+	python lab3b.py
 
 clean:
-	rm -f ./lab3b-804585999.tar.gz ./lab3b
+	rm -f ./lab3b-804585999.tar.gz
 
 dist: default
-	tar -zcf lab3b-804585999.tar.gz ./Makefile ./README ./lab3b.c
+	tar -zcf lab3b-804585999.tar.gz ./Makefile ./README ./lab3b.py
