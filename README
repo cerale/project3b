@@ -7,6 +7,12 @@ ID: 104844623,804585999
 ------------------
 Within this submission are the following files:
 lab3b.py
+This is a Python3 script which uses the Pandas package to parse the csv document.
+The following line uses pip to install the package:
+> pip install pandas
+The script takes in a .csv file and performs block consistency audits, i-node
+allocation audits, and directory consistency audits. Any inconsistencies found
+will be recorded to stdout.
 This program has the following exit codes.
 0 ... successful execution, no inconsistencies found.
 1 ... unsuccessful execution, bad parameters or system call failure.
@@ -15,7 +21,7 @@ This program has the following exit codes.
 Makefile
 Builds all the executables and has the following targets:
 default
-Compiles lab3b.c with the appropriate flags.
+Interprets lab3b.py with the appropriate flags.
 clean
 Deletes all files lab3b creates.
 dist
@@ -24,3 +30,7 @@ Creates the submission tarball.
 --------------
 | References |
 --------------
+Pandas documentation:
+https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html
+Pandas article:
+https://www.shanelynn.ie/python-pandas-read_csv-load-data-from-csv-files/

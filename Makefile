@@ -7,7 +7,7 @@ ifndef VERBOSE
 endif
 
 default:
-	python3 lab3b.py
+	alias python='python3'
 	rm -f lab3b
 	ln -s lab3b.py lab3b
 	chmod +x lab3b

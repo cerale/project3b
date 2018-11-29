@@ -6,6 +6,8 @@ import sys
 import csv
 import pandas
 
+everything_is_ok = True
+
 def main():
     #Check argument
     if (len(sys.argv) != 2):
@@ -23,7 +25,10 @@ def main():
     #Take in data
     data = pandas.read_csv(filename)
 
-    sys.exit(0) #Successful exit
+    if everything_is_ok:
+        sys.exit(0) #Successful exit
+    else:
+        sys.exit(2) #Inconsistency found, everything is not ok
 
 if __name__ == "__main__":
     main()
