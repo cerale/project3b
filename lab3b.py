@@ -7,7 +7,7 @@ import csv
 
 def main():
     print("Hello world")
-    sys.exit(0)
+    sys.exit(0) #Successful exit
 
 if __name__ == "__main__":
     main()
