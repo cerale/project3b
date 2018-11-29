@@ -7,10 +7,7 @@ ID: 104844623,804585999
 ------------------
 Within this submission are the following files:
 lab3b.py
-This is a Python3 script which uses the Pandas package to parse the csv document.
-The following line uses pip to install the package:
-> pip install pandas
-The script takes in a .csv file and performs block consistency audits, i-node
+This Python3 script takes in a .csv file and performs block consistency audits, i-node
 allocation audits, and directory consistency audits. Any inconsistencies found
 will be recorded to stdout.
 This program has the following exit codes.
@@ -27,6 +24,8 @@ Deletes all files lab3b creates.
 dist
 Creates the submission tarball.
 
+lab3b
+This is a shell script which takes in one argument and runs lab3b.py with it.
 --------------
 | References |
 --------------

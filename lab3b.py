@@ -4,7 +4,6 @@
 
 import sys
 import csv
-import pandas
 
 everything_is_ok = True
 
@@ -23,7 +22,6 @@ def main():
         sys.exit(1)
 
     #Take in data
-    data = pandas.read_csv(filename)
 
     if everything_is_ok:
         sys.exit(0) #Successful exit

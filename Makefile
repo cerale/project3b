@@ -7,13 +7,11 @@ ifndef VERBOSE
 endif
 
 default:
-	alias python='python3'
-	rm -f lab3b
-	ln -s lab3b.py lab3b
 	chmod +x lab3b
+	echo "Compilation successful"
 
 clean:
-	rm -f ./lab3b-804585999.tar.gz lab3b
+	rm -f ./lab3b-804585999.tar.gz
 
 dist: default
-	tar -zcf lab3b-804585999.tar.gz ./Makefile ./README ./lab3b.py
+	tar -zcf lab3b-804585999.tar.gz ./Makefile ./README ./lab3b.py ./lab3b
