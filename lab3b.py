@@ -6,7 +6,8 @@ import sys
 import csv
 
 def main():
-    return 0
+    print("Hello world")
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()
