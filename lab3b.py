@@ -12,9 +12,9 @@ group = []
 bfree_list = []
 ifree_list = []
 inode_list = []
+inode_num_list = []
 dirent_list = []
 indirent_list = []
-inode_num_list = []
 
 def block_consistency_audits():
     return
@@ -37,6 +37,22 @@ def inode_allocation_audits():
     return
 
 def directory_consistency_audits():
+    #Check i-node reference count against discovered links
+    record_inodelink = [] #Each index + 1 represents an i-node
+    #Check for invalid or unallocated inodes while incrementing record of links
+    for i in range(superblock[0].s_inodes_count):
+        record_inodelink.append(0)
+    for directory in dirent_list:
+        if((directory.inode_num > superblock[0].s_inodes_count) or (directory.inode_num < 1)): #Invalid inode
+            everything_is_ok = False
+            print("DIRECTORY INODE " + str(directory.parentinode_num) + " NAME " + directory.name + " INVALID INODE " + str(directory.inode_num))
+        elif(directory.inode_num not in inode_num_list): #Unallocated inode
+            everything_is_ok = False
+            print("DIRECTORY INODE " + str(directory.parentinode_num) + " NAME " + directory.name + " UNALLOCATED INODE " + str(directory.inode_num))
+        elif(directory.inode_num - 1 in range(superblock[0].s_inodes_count)):
+            record_inodelink[directory.inode_num - 1] += 1
+
+    #print("INODE " + str() + " HAS " + str() + " LINKS BUT LINKCOUNT IS " + str())
     return
 
 def read_csv():
