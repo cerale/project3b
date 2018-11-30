@@ -105,13 +105,13 @@ def inode_allocation_audits():
     for i in inode_list:
         if i.inode_num in ifree_list: #Inconsistency found
             everything_is_okay = False
-            print("ALLOCATED INODE " + i.inode_num + " ON FREELIST")
+            print("ALLOCATED INODE " + str(i.inode_num) + " ON FREELIST")
 
     #Check unallocated inodes are in freelist
     for i in range(superblock[0].s_first_ino, superblock[0].s_inodes_count):
         if i not in ifree_list and i not in inode_num_list:
             everything_is_okay = False
-            print("UNALLOCATED INODE " + i + " NOT ON FREELIST")
+            print("UNALLOCATED INODE " + str(i) + " NOT ON FREELIST")
 
     return
 
