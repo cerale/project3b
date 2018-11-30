@@ -51,9 +51,13 @@ def directory_consistency_audits():
             print("DIRECTORY INODE " + str(directory.parentinode_num) + " NAME " + directory.name + " UNALLOCATED INODE " + str(directory.inode_num))
         elif(directory.inode_num - 1 in range(superblock[0].s_inodes_count)):
             record_inodelink[directory.inode_num - 1] += 1
-
+    #Record of links is completed. Check for correct link counts
+    for curr_inode in inode_list:
+        if (curr_inode.inode_num in range(superblock[0].s_inodes_count)):
+            if (record_inodelink[curr_inode.inode_num - 1] != curr_inode.link_count):
+                everything_is_ok = False
+                print("INODE " + str(curr_inode.inode_num) + " HAS " + str(record_inodelink[curr_inode.inode_num - 1]) + " LINKS BUT LINKCOUNT IS " + str(curr_inode.link_count))
     #print("INODE " + str() + " HAS " + str() + " LINKS BUT LINKCOUNT IS " + str())
-    return
 
 def read_csv():
     try:
