@@ -13,6 +13,10 @@ default:
 	chmod +x lab3b
 	echo "Compilation successful"
 
+check: dist
+	chmod +x P3_check.sh
+	./P3_check.sh 804585999
+
 clean:
 	rm -f ./lab3b-804585999.tar.gz lab3b
 

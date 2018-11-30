@@ -112,7 +112,6 @@ def inode_allocation_audits():
         if i not in ifree_list and i not in inode_num_list:
             everything_is_okay = False
             print("UNALLOCATED INODE " + str(i) + " NOT ON FREELIST")
-
     return
 
 def directory_consistency_audits():

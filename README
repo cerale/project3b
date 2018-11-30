@@ -18,13 +18,13 @@ This program has the following exit codes.
 Makefile
 Builds all the executables and has the following targets:
 default
-Checks to make sure executable is able to be executed.
+Checks to make sure executable is able to be executed. Creates a soft link "lab3b" for grading purposes.
 clean
 Deletes all files lab3b creates leaving it in its original state.
 dist
 Creates the submission tarball.
 
-lab3b
+lab3b.sh
 This is a shell script which takes in one argument and runs lab3b.py with it.
 --------------
 | References |
