@@ -39,6 +39,7 @@ def inode_allocation_audits():
 def directory_consistency_audits():
     #Check i-node reference count against discovered links
     record_inodelink = [] #Each index + 1 represents an i-node
+
     #Check for invalid or unallocated inodes while incrementing record of links
     for i in range(superblock[0].s_inodes_count):
         record_inodelink.append(0)
@@ -51,14 +52,23 @@ def directory_consistency_audits():
             print("DIRECTORY INODE " + str(directory.parentinode_num) + " NAME " + directory.name + " UNALLOCATED INODE " + str(directory.inode_num))
         elif(directory.inode_num - 1 in range(superblock[0].s_inodes_count)):
             record_inodelink[directory.inode_num - 1] += 1
+
     #Record of links is completed. Check for correct link counts
     for curr_inode in inode_list:
         if (curr_inode.inode_num in range(superblock[0].s_inodes_count)):
             if (record_inodelink[curr_inode.inode_num - 1] != curr_inode.link_count):
                 everything_is_ok = False
                 print("INODE " + str(curr_inode.inode_num) + " HAS " + str(record_inodelink[curr_inode.inode_num - 1]) + " LINKS BUT LINKCOUNT IS " + str(curr_inode.link_count))
-    #print("INODE " + str() + " HAS " + str() + " LINKS BUT LINKCOUNT IS " + str())
 
+    #Check for . directory
+    for directory in dirent_list:
+        if ((directory.name == "'.'") and (directory.parentinode_num != directory.inode_num)):
+            everything_is_ok = False
+            print("DIRECTORY INODE " + str(directory.parentinode_num) + " NAME '.' LINK TO INODE " + str(directory.inode_num) + " SHOULD BE " + str(directory.parentinode_num))
+
+    #Check for .. directory
+    
+    return
 def read_csv():
     try:
         with open(sys.argv[1]) as filename:
