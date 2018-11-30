@@ -26,6 +26,9 @@ def inode_allocation_audits():
             everything_is_ok = False
             print("ALLOCATED INODE " + str(i.inode_num) + " ON FREELIST")
 
+    #Add inodes to list for checking
+    for i in range(len(inode_list)):
+        inode_num_list.append(inode_list[i].inode_num)
     #Check unallocated inodes are in freelist
     for i in range(superblock[0].s_first_ino, superblock[0].s_inodes_count):
         if i not in ifree_list and i not in inode_num_list:
@@ -75,9 +78,6 @@ def main():
 
     #Take in data
     read_csv()
-
-    for i in range(len(inode_list)):
-        inode_num_list.append(inode_list[i].inode_num)
 
     #Perform audits
     block_consistency_audits()
