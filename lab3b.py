@@ -84,6 +84,7 @@ def main():
     inode_allocation_audits()
     directory_consistency_audits()
 
+    #Exit with the appropriate value
     if everything_is_ok:
         sys.exit(0) #Successful exit
     else:
