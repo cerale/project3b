@@ -61,6 +61,7 @@ def read_csv():
     except IOError:
         print("Open file failed.", file = sys.stderr)
         sys.exit(1)
+    return
 
 def main():
     #Check argument
