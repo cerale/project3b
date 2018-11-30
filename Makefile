@@ -7,11 +7,14 @@ ifndef VERBOSE
 endif
 
 default:
+	rm -f lab3b
+	ln -s lab3b.sh lab3b
+	chmod +x lab3b.sh
 	chmod +x lab3b
 	echo "Compilation successful"
 
 clean:
-	rm -f ./lab3b-804585999.tar.gz
+	rm -f ./lab3b-804585999.tar.gz lab3b
 
 dist: default
-	tar -zcf lab3b-804585999.tar.gz ./Makefile ./README ./lab3b.py ./lab3b
+	tar -zcf lab3b-804585999.tar.gz ./Makefile ./README ./lab3b.py ./lab3b.sh
