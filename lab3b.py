@@ -96,6 +96,15 @@ def read_csv():
         print("Open file failed.", file = sys.stderr)
         sys.exit(1)
 
+def block_consistency_audits():
+    return
+
+def inode_allocation_audits():
+    return
+
+def directory_consistency_audits():
+    return
+
 def main():
     #Check argument
     if (len(sys.argv) != 2):
@@ -112,6 +121,11 @@ def main():
 
     #Take in data
     read_csv()
+
+    #Perform audits
+    block_consistency_audits()
+    inode_allocation_audits()
+    directory_consistency_audits()
 
     if everything_is_ok:
         sys.exit(0) #Successful exit
