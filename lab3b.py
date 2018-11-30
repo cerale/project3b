@@ -100,6 +100,12 @@ def block_consistency_audits():
     return
 
 def inode_allocation_audits():
+    #Check allocated inodes are not in freelist
+    for i in inode_list:
+        if i.inode_num in ifree_list: #Inconsistency found
+            print("ALLOCATED INODE " + i.inode_num + " ON FREELIST")
+
+    #Check unallocated inodes are in freelist
     return
 
 def directory_consistency_audits():
