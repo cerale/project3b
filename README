@@ -15,6 +15,10 @@ This program has the following exit codes.
 1 ... unsuccessful execution, bad parameters or system call failure.
 2 ... successful execution, inconsistencies found.
 
+classes.py
+This Python3 script contains classes for each kind of input that the csv will contain.
+The contents for this file was made by reading over the Project3A spec.
+
 Makefile
 Builds all the executables and has the following targets:
 default
