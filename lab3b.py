@@ -12,9 +12,9 @@ group = []
 bfree_list = []
 ifree_list = []
 inode_list = []
+inode_num_list = []
 dirent_list = []
 indirent_list = []
-inode_num_list = []
 
 def block_consistency_audits():
     return
@@ -37,6 +37,50 @@ def inode_allocation_audits():
     return
 
 def directory_consistency_audits():
+    #Check i-node reference count against discovered links
+    record_inodelink = [] #Each index + 1 represents an i-node
+
+    #Check for invalid or unallocated inodes while incrementing record of links
+    for i in range(superblock[0].s_inodes_count):
+        record_inodelink.append(0)
+    for directory in dirent_list:
+        if((directory.inode_num > superblock[0].s_inodes_count) or (directory.inode_num < 1)): #Invalid inode
+            everything_is_ok = False
+            print("DIRECTORY INODE " + str(directory.parentinode_num) + " NAME " + directory.name + " INVALID INODE " + str(directory.inode_num))
+        elif(directory.inode_num not in inode_num_list): #Unallocated inode
+            everything_is_ok = False
+            print("DIRECTORY INODE " + str(directory.parentinode_num) + " NAME " + directory.name + " UNALLOCATED INODE " + str(directory.inode_num))
+        elif(directory.inode_num - 1 in range(superblock[0].s_inodes_count)):
+            record_inodelink[directory.inode_num - 1] += 1
+
+    #Record of links is completed. Check for correct link counts
+    for curr_inode in inode_list:
+        if (curr_inode.inode_num in range(superblock[0].s_inodes_count)):
+            if (record_inodelink[curr_inode.inode_num - 1] != curr_inode.link_count):
+                everything_is_ok = False
+                print("INODE " + str(curr_inode.inode_num) + " HAS " + str(record_inodelink[curr_inode.inode_num - 1]) + " LINKS BUT LINKCOUNT IS " + str(curr_inode.link_count))
+
+    #Check for correctness of . directory
+    for directory in dirent_list:
+        if ((directory.name == "'.'") and (directory.parentinode_num != directory.inode_num)):
+            everything_is_ok = False
+            print("DIRECTORY INODE " + str(directory.parentinode_num) + " NAME '.' LINK TO INODE " + str(directory.inode_num) + " SHOULD BE " + str(directory.parentinode_num))
+
+    #Check for correctness of .. directory
+    for directory in dirent_list:
+        if ((directory.name == "'..'") and (directory.parentinode_num == 2) and (directory.parentinode_num != directory.inode_num)):
+            everything_is_ok = False
+            print("DIRECTORY INODE " + str(directory.parentinode_num) + " NAME '..' LINK TO INODE " + str(directory.inode_num) + " SHOULD BE " + str(directory.parentinode_num))
+    for directory in dirent_list:
+        parents_maybe = [] #Holds all possible parents
+        if ((directory.name == "'..'") and (directory.parentinode_num != 2)):
+            for i in dirent_list:
+                if ((directory.parentinode_num == i.inode_num) and (directory.parentinode_num != i.parentinode_num)):
+                    parents_maybe.append(i)
+            for parent_directory in parents_maybe:
+                if (directory.inode_num != parent_directory.parentinode_num):
+                    everything_is_ok = False
+                    print("DIRECTORY INODE " + str(directory.parentinode_num) + " NAME " + directory.name + " LINK TO INODE " + str(directory.inode_num) + " SHOULD BE " + str(parent_directory.parentinode_num))
     return
 
 def read_csv():
@@ -61,6 +105,7 @@ def read_csv():
     except IOError:
         print("Open file failed.", file = sys.stderr)
         sys.exit(1)
+    return
 
 def main():
     #Check argument
