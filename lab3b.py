@@ -13,6 +13,7 @@ ifree_list = []
 inode_list = []
 dirent_list = []
 indirent_list = []
+inode_num_list = []
 
 class Superblock_Summary:
     def __init__(self, row):
@@ -103,9 +104,15 @@ def inode_allocation_audits():
     #Check allocated inodes are not in freelist
     for i in inode_list:
         if i.inode_num in ifree_list: #Inconsistency found
+            everything_is_okay = False
             print("ALLOCATED INODE " + i.inode_num + " ON FREELIST")
 
     #Check unallocated inodes are in freelist
+    for i in range(superblock[0].s_first_ino, superblock[0].s_inodes_count):
+        if i not in ifree_list and i not in inode_num_list:
+            everything_is_okay = False
+            print("UNALLOCATED INODE " + i + " NOT ON FREELIST")
+
     return
 
 def directory_consistency_audits():
@@ -127,6 +134,9 @@ def main():
 
     #Take in data
     read_csv()
+
+    for i in range(len(inode_list)):
+        inode_num_list.append(inode_list[i].inode_num)
 
     #Perform audits
     block_consistency_audits()
