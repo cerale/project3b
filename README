@@ -18,9 +18,9 @@ This program has the following exit codes.
 Makefile
 Builds all the executables and has the following targets:
 default
-Interprets lab3b.py with the appropriate flags.
+Checks to make sure executable is able to be executed.
 clean
-Deletes all files lab3b creates.
+Deletes all files lab3b creates leaving it in its original state.
 dist
 Creates the submission tarball.
 
@@ -29,7 +29,7 @@ This is a shell script which takes in one argument and runs lab3b.py with it.
 --------------
 | References |
 --------------
-Pandas documentation:
-https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html
-Pandas article:
-https://www.shanelynn.ie/python-pandas-read_csv-load-data-from-csv-files/
+CSV Documentation:
+https://docs.python.org/3/library/csv.html
+The Second Extended File System:
+http://www.nongnu.org/ext2-doc/ext2.html#S-R-BLOCKS-COUNT
