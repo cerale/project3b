@@ -60,15 +60,29 @@ def directory_consistency_audits():
                 everything_is_ok = False
                 print("INODE " + str(curr_inode.inode_num) + " HAS " + str(record_inodelink[curr_inode.inode_num - 1]) + " LINKS BUT LINKCOUNT IS " + str(curr_inode.link_count))
 
-    #Check for . directory
+    #Check for correctness of . directory
     for directory in dirent_list:
         if ((directory.name == "'.'") and (directory.parentinode_num != directory.inode_num)):
             everything_is_ok = False
             print("DIRECTORY INODE " + str(directory.parentinode_num) + " NAME '.' LINK TO INODE " + str(directory.inode_num) + " SHOULD BE " + str(directory.parentinode_num))
 
-    #Check for .. directory
-    
+    #Check for correctness of .. directory
+    for directory in dirent_list:
+        if ((directory.name == "'..'") and (directory.parentinode_num == 2) and (directory.parentinode_num != directory.inode_num)):
+            everything_is_ok = False
+            print("DIRECTORY INODE " + str(directory.parentinode_num) + " NAME '..' LINK TO INODE " + str(directory.inode_num) + " SHOULD BE " + str(directory.parentinode_num))
+    for directory in dirent_list:
+        parents_maybe = [] #Holds all possible parents
+        if ((directory.name == "'..'") and (directory.parentinode_num != 2)):
+            for i in dirent_list:
+                if ((directory.parentinode_num == i.inode_num) and (directory.parentinode_num != i.parentinode_num)):
+                    parents_maybe.append(i)
+            for parent_directory in parents_maybe:
+                if (directory.inode_num != parent_directory.parentinode_num):
+                    everything_is_ok = False
+                    print("DIRECTORY INODE " + str(directory.parentinode_num) + " NAME " + directory.name + " LINK TO INODE " + str(directory.inode_num) + " SHOULD BE " + str(parent_directory.parentinode_num))
     return
+
 def read_csv():
     try:
         with open(sys.argv[1]) as filename:
