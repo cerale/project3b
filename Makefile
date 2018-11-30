@@ -14,11 +14,11 @@ default:
 	echo "Compilation successful"
 
 check: dist
-	chmod +x P3_check.sh
-	./P3_check.sh 804585999
+	chmod +x P3B_check.sh
+	./P3B_check.sh 804585999
 
 clean:
 	rm -f ./lab3b-804585999.tar.gz lab3b
 
 dist: default
-	tar -zcf lab3b-804585999.tar.gz ./Makefile ./README ./lab3b.py ./lab3b.sh
+	tar -zcf lab3b-804585999.tar.gz ./Makefile ./README ./lab3b.py ./lab3b.sh ./classes.py
