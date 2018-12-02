@@ -56,3 +56,14 @@ class Indirent_Summary:
         self.logicalblock_offset = int(row[3])
         self.indirectblock_num = int(row[4])
         self.referencedblock_num = int(row[5])
+
+class Info:
+    def __init__(self, block_type, block_num, inode_num, offset):
+        if block_type == '':
+            blockStr = 'BLOCK'
+        else:
+            blockStr = ' BLOCK'
+        self.block_type = block_type + blockStr
+        self.block_num = block_num
+        self.inode_num = inode_num
+        self.offset = offset

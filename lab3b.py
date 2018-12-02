@@ -18,7 +18,10 @@ indirent_list = []
 
 def block_consistency_audits():    
     block_dict = {}
-    
+    levels = {1: 'INDIRECT', 2: 'DOUBLE INDIRECT', 3: 'TRIPLE INDIRECT'}
+    #third migo is offset
+    third_migo = {1: 12, 2: (12+256), 3: (12 + 256 + (256*256))}
+        
     for i in inode_list:
         logical_offset = 0
         for j in i.block_list:
@@ -40,27 +43,72 @@ def block_consistency_audits():
 
             logical_offset = logical_offset + 1
         
-        levels = {1: 'INDIRECT', 2: 'DOUBLE INDIRECT', 3: 'TRIPLE INDIRECT'}
-        #third migo is offset
-        third_migo = {1: 12, 2: (12+256), 3: (12 + 256 + (256*256))}
         for k in range(len(i.pointer_list)):
             ind = levels[k+1]
             logical_offset = third_migo[k+1]
-            if i.pointer_list != 0:
+            if i.pointer_list[k] != 0:
                 if i.pointer_list[k] < 0 or i.pointer_list[k] > (superblock[0].s_blocks_count-1):
                     everything_is_ok = False
                     print("INVALID " + str(ind) + " BLOCK " 
-                          + str(i.pointer_list[k]) + " IN INODE "
-                          + str(i.inode_num) +  " AT OFFSET " + str(logical_offset))
+                              + str(i.pointer_list[k]) + " IN INODE "
+                              + str(i.inode_num) +  " AT OFFSET " + str(logical_offset))
                 if i.pointer_list[k] < (group[0].firstblock_location + superblock[0].s_inode_size *
-                        group[0].inode_count / superblock[0].s_block_size):
+                                            group[0].inode_count / superblock[0].s_block_size):
                     everything_is_ok = False
-#                    print("RESERVED " + str(ind) + " BLOCK " + str(i.pointer_list[k]) 
-#                          + " IN INODE" + str(i.inode_num) + " AT OFFSET " + str(logical_offset))
-#                          + " IN INODE " +  str(i.inode_num) + " AT OFFSET " + logical_offset)
+                    print("RESERVED " + str(ind) + " BLOCK " + str(i.pointer_list[k])
+                              + " IN INODE " + str(i.inode_num) + " AT OFFSET " + str(logical_offset))                
+                elif i.pointer_list[k] in block_dict:
+                    block_dict[i.pointer_list[k]].append(classes.Info(ind, i.pointer_list[k], i.inode_num, logical_offset))
+                else:
+                    block_dict[i.pointer_list[k]] = [classes.Info(ind, i.pointer_list[k], i.inode_num, logical_offset)]
+        
+
+    for l in range(len(indirent_list)):
+        ind = levels[indirent_list[l].indirection_level]
+        logical_offset = indirent_list[l].logicalblock_offset
+        if indirent_list[l].referencedblock_num != 0:
+            if indirent_list[l].referencedblock_num < 0 or indirent_list[l].referenceblock_num > (superblock[0].s_blocks_count - 1) or indirent_list[l].referenceblock_num < (group[0].firstblock_location + superblock[0].s_inode_size * group[0].inode_count / superblock[0].s_block_size):
+                everything_is_ok = False
+                print("INVALID " +str(ind) +" BLOCK " + str(indirent_list[l].referencedblock_num) + " IN INODE "
+                      + str(indirent_list[l].inode_num) + " AT OFFSET " + str(logical_offset))
+            elif indirent_list[l].referencedblock_num:
+                block_dict[indirent_list[l].referencedblock_num].append(classes.Info(ind, indirent_list[l].referencedblock_num, indirent_list[l].inode_num, logical_offset))
+            else:
+                block_dict[indirent_list[l].referencedblock_num] = [classes.Info(ind, indirent_list[l].referencedblock_num, indirent_list[l].inode_num, logical_offset)]
+
+    for block in range(0, superblock[0].s_blocks_count):
+        if (group[0].firstblock_location + superblock[0].s_inode_size * group[0].inode_count / superblock[0].s_block_size) <= block <= superblock[0].s_blocks_count-1:
+            if block in block_dict and block in bfree_list:
+                everything_is_ok = False
+                print("ALLOCATED BLOCK " + str(block) + " ON FREELIST")
+                
+    for block in range(0, superblock[0].s_blocks_count):
+        if (group[0].firstblock_location + superblock[0].s_inode_size * group[0].inode_count / superblock[0].s_block_size) <= block <= superblock[0].s_blocks_count-1:
+            if block in block_dict:
+                my_block = block_dict[block]
+            if len(my_block) > 1:
+                for duplicate in range(len(my_block)):
+                    block_data = my_block[duplicate]
+                    everything_is_ok = False
+                    print("DUPLICATE " +  str(block_data.block_type) + " " + str(block_data.block_num)
+                          + " IN INODE " + str(block_data.inode_num) + " AT OFFSET " 
+                          + str(block_data.offset))
 
 
-    return
+
+    return                            
+
+
+    
+    #Unreferenced audit
+'''
+    for block in range(0, superblock[0].s_blocks_count):
+        if (group[0].firstblock_location + superblock[0].s_inode_size * group[0].inode_count / superblock[0].s_block_size) <= block <= superblock[0].s_blocks_count-1:
+            if block not in block_dict and block not in bfree_list:
+                everything_is_ok = False
+                print("UNREFERENCED BLOCK " + str(block))
+'''
+
    
 def inode_allocation_audits():
     #Check allocated inodes are not in freelist
